@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Security</title>
+
+<style>
+body{margin:0;background:black;color:#00ffcc;font-family:monospace;overflow:hidden;}
+#camera{position:fixed;width:100%;height:100%;object-fit:cover;opacity:0.2;}
+.container{position:relative;text-align:center;margin-top:20%;}
+.keypad{display:grid;grid-template-columns:repeat(3,80px);gap:10px;justify-content:center;}
+.key{padding:15px;background:#111;border:1px solid #0ff;}
+.pin{letter-spacing:10px;margin-top:10px;}
+</style>
+</head>
+
+<body>
+
+<video id="camera" autoplay playsinline></video>
+
+<div class="container">
+<h1 id="logo">⚠ SYSTEM LOCK ⚠</h1>
+<div id="timer">60</div>
+<div class="pin" id="pin">----</div>
+
+<div class="keypad">
+<div class="key" onclick="press(1)">1</div>
+<div class="key" onclick="press(2)">2</div>
+<div class="key" onclick="press(3)">3</div>
+<div class="key" onclick="press(4)">4</div>
+<div class="key" onclick="press(5)">5</div>
+<div class="key" onclick="press(6)">6</div>
+<div class="key" onclick="press(7)">7</div>
+<div class="key" onclick="press(8)">8</div>
+<div class="key" onclick="press(9)">9</div>
+<div class="key" onclick="press(0)">0</div>
+</div>
+</div>
+
+<script>
+// kamera
+navigator.mediaDevices.getUserMedia({video:true})
+.then(s=>document.getElementById("camera").srcObject=s)
+.catch(()=>{});
+
+// timer
+let t=60;
+let run=setInterval(()=>{
+t--;
+document.getElementById("timer").innerText=t;
+if(t<=0){
+document.body.innerHTML="<h1 style='color:red'>SYSTEM DESTROYED 💀</h1>";
+clearInterval(run);
+}
+},1000);
+
+// pin
+let input="";
+function press(n){
+if(input.length<4){input+=n;}
+document.getElementById("pin").innerText=input.padEnd(4,"-");
+
+if(input.length==4){
+if(input==="1111"){
+document.body.innerHTML="<h1 style='color:lime'>UNLOCKED ✅</h1>";
+}else{
+input="";
+navigator.vibrate && navigator.vibrate(200);
+}
+}
+}
+
+// exit rahasia
+let tap=0;
+document.getElementById("logo").onclick=()=>{
+tap++;
+setTimeout(()=>tap=0,1000);
+if(tap>=7){
+document.body.innerHTML="<h1>KELUAR 😆</h1>";
+}
+};
+</script>
+
+</body>
+</html>
